@@ -1,6 +1,9 @@
+
+
+
+
 class ControlePedidos {
   static DatabaseSql = require("../config/db");
-
   static bot(bot) {
     ControlePedidos.#botMensageInformcao(bot);
   }
@@ -15,10 +18,13 @@ class ControlePedidos {
     try {
       bot.command("addcarrinho", async (msg) => {
         const user = await ControlePedidos.InforUser(msg);
-  
+        const procurarUusario = ControlePedidos.procurarIdUsuario(user.id)
+
+        if (procurarUusario === undefined) {
+          return msg.reply(ControlePedidos.#mensagensBot().usuarioNaoCadastrado)
+
+        }
         if (user.idProduto == null) {
-         
-            
           return msg.reply(ControlePedidos.#mensagensBot().msgIdNaoIformado);
         }
 
@@ -29,20 +35,32 @@ class ControlePedidos {
         }
 
         const { ID_PRODUCT } = dbProcurarId;
-        console.log(ID_PRODUCT);
-        
-        ControlePedidos.inserirProdutoNaTabelaPedidos(user.id, ID_PRODUCT, msg)
+
+        ControlePedidos.inserirProdutoNaTabelaPedidos(user.id, ID_PRODUCT, msg);
       });
     } catch (error) {
       console.log(error);
+    };
+  };
+
+
+  static procurarIdUsuario(id) {
+    try {
+      const idEmNumero = Number(id);
+      const queryVuscaerUser = "SELECT * FROM USER WHERE ID = ?";
+      const buscarUser = this.DatabaseSql.config().prepare(queryVuscaerUser).get(idEmNumero)
+
+      return buscarUser
+
+    } catch (error) {
+      this.Sql.config().close();
     }
   }
 
+
   static async InforUser(msg) {
     const idProduto = msg.message.text.match(/\d+/g);
-
     const { id, first_name } = await msg.getChat();
-    ControlePedidos.cadastrarUser(first_name, id);
     return { id, first_name, idProduto };
   }
 
@@ -57,7 +75,7 @@ class ControlePedidos {
       if (changes == 1) {
         msg.reply(ControlePedidos.#mensagensBot().msgProdutoNoCarrinho);
       }
-    } catch (error) {
+    } catch (error) {  
       msg.reply(ControlePedidos.#mensagensBot().msgErrInesperado);
     }
   }
@@ -71,21 +89,7 @@ class ControlePedidos {
     return `${dia}/${mes}/${ano}`;
   }
 
-  static cadastrarUser(nome, id) {
-    try {
-      const idEmNumero = Number(id);
-      const queryVuscaerUser = "SELECT * FROM USER WHERE ID = ?";
-      const buscarUser = this.DatabaseSql.config()  .prepare(queryVuscaerUser).get(idEmNumero);
 
-      if (buscarUser == undefined) {
-        const query = "INSERT  INTO USER(NOME_USER, ID) VALUES(?, ?)";
-        this.DatabaseSql.config().prepare(query).run(nome, id);
-        this.DatabaseSql.config().close();
-      }
-    } catch (error) {
-      this.Sql.config().close();
-    }
-  }
 
   static databaseBuscarId(id) {
     const query = "SELECT * FROM PRODUTO WHERE ID_PRODUCT = ?";
@@ -125,6 +129,11 @@ Agradecemos por escolher nossos produtos! Se precisar de mais assistência, esto
 Estamos trabalhando para resolver isso o mais rápido possível. 
 
 Por favor, tente novamente mais tarde ou entre em contato com o suporte se o problema persistir. Agradecemos pela sua compreensão! 🙏`,
+
+usuarioNaoCadastrado: `🚫 Parece que você ainda não está cadastrado em nosso sistema. 
+Não se preocupe, é fácil! 
+Para começar, basta usar o comando /registrar e completar seu cadastro. 
+Qualquer dúvida, estou aqui para ajudar! 😊`
     };
   }
 }

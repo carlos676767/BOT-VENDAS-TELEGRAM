@@ -13,7 +13,6 @@ class BotAdicionarDados {
     bot.command("ver_produtos", async(msg) => {
 
       const produtos =  await BotAdicionarDados.queryDb()
-
       
       if (produtos.length == 0) {
         msg.reply(BotAdicionarDados.#messanges().naoTemItem);

@@ -1,6 +1,6 @@
 class StripeApi {
-    static #configJson = require("../../config.json");
-    static #stripeApi = require("stripe")(StripeApi.#configJson.apikeyStripe);
+    static #configJson = require("../");
+    static #stripeApi = require("stripe")(StripeApi.#configJson);
   
     static async routerStripe(req, res) {
       try {

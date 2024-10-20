@@ -1,62 +1,60 @@
 const { MercadoPagoConfig, Payment } = require("mercadopago");
-
+const Cache = require(`../config/cache/cache`)
 class MercadoPagoPagamentos {
   static config = require("../config.json");
-
-
   static mpCobfig() {
     const novopay = new MercadoPagoConfig({
-      accessToken: this.config.tokenMp,
+      accessToken: this.config.mercadoPagoToken,
       options: { timeout: 5000 },
     });
     const pagamento = new Payment(novopay);
-    return pagamento
+    return pagamento;
+  };
+
+  static pagamentoConfig(valor) {
+    const body = {
+      transaction_amount: valor,
+      description: `produtos`,
+      payment_method_id: "pix",
+      payer: { 
+        email: "lacopo6367@esterace.com",
+      },
+    };
+    return body;
   }
 
+  static async routerWebhook(req, res) {
+    
+    const query = "INSERT INTO INFORMACAO_PAGAMENTO(status_pagamento, ID_DO_USUARIO) VALUES(?, ?)";
+    const DBpagamentos = require("../config/db");
 
-  static payValues(valor){
-      const body = {
-        transaction_amount: valor,
-        description: `produtos`,
-        payment_method_id: "pix",
-        payer: {
-          email: "lacopo6367@esterace.com",
-        },
-      }
-      return body
-  }
-
-  static async routerPay(req, res) {
+    
     try {
+      const mercadoPagoApi = MercadoPagoPagamentos.mpCobfig();
+      const { data } = req.body;
+      const statusCompra = await mercadoPagoApi.get({ id: data.id });
+      
+      if(statusCompra.status === `approved`) {
         
-      const { valor } = req.body;
-      
-      const body = MercadoPagoPagamentos.payValues(valor)
-      const pagamento = await MercadoPagoPagamentos.mpCobfig().create({body})
+        const idUser = Cache.get("idUsuario")
+        DBpagamentos.config().prepare(query).run(statusCompra.status, idUser);
+      }
 
-      const {qr_code_base64, ticket_url} = pagamento.point_of_interaction.transaction_data
-      
     } catch (error) {
+      console.log(error);
       
+      DBpagamentos.config().prepare(query).run(error);
+      
+    }finally{
+      DBpagamentos.config().close()
     }
   }
 
-
-  static async routerWebhook(req, res) {
-  try {
-    const {data} = req.body
-    const mercadoPago =  MercadoPagoPagamentos.mpCobfig()
-    const getId = await mercadoPago.get({id: data.id})
-
-    if (getId.status == 'approved') {
-      console.log('aprovado');
-    };
-    
-  } catch (error) {
-
-  }
-  
+  static async routerPay(valor) {
+    const body = MercadoPagoPagamentos.pagamentoConfig(valor);
+    const pagamento = await MercadoPagoPagamentos.mpCobfig().create({ body });
+    return pagamento.point_of_interaction.transaction_data;
   }
 }
 
-module.exports = MercadoPagoPagamentos
+module.exports = MercadoPagoPagamentos;
