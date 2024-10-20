@@ -120,7 +120,7 @@ Se precisar de mais assistência, estou aqui para ajudar! 😊`,
       msgProdutoNoCarrinho: `🛒 Produto adicionado ao seu carrinho com sucesso! 
 
 Para visualizar os itens em seu carrinho, use o comando /meu_carrinho. 
-Se estiver pronto para finalizar a compra, use o comando /pagamento.
+Se estiver pronto para finalizar a compra, use o comando /finalizarCompraPix. ou /finalizarCompraComOutroMetodo
 
 Agradecemos por escolher nossos produtos! Se precisar de mais assistência, estou aqui para ajudar! 😊`,
 

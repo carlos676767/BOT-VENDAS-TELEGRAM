@@ -34,36 +34,54 @@ class ComprasViaPix {
       if (data != undefined) {
         const { status_pagamento } = data;
 
-
-        ComprasViaPix.deletarProdutosPagos()
+        const idProdutos = this.cache.get("ids")
+        
 
         if (status_pagamento === "approved") {
           msg.reply(ComprasViaPix.mensagens().msgPagamentoAprovado);
+
+          ComprasViaPix.entregarProduto(idProdutos, msg)
+          ComprasViaPix.deletarProdutosPagos(idProdutos)
           clearInterval(monitorarPagamentoAprovado);
         }
       }
     }, 20000);
   }
 
-  static deletarProdutosPagos() {
-    const idProdutos = this.cache.get("ids")
+
+
+  static entregarProduto(ids, msg){
+    const espaçosReservados = ids.map((data) => (data = "?")).join(",")
+
+    const query = `SELECT * FROM PRODUTO WHERE ID_PRODUCT IN(${espaçosReservados})`
+  
+    const procurarKeys = this.db.config().prepare(query).all(...ids)
+
+    const keys = procurarKeys.map(data => data.keys).join(',')
+    msg.reply(this.mensagens(keys).msgKey)
+
+  };
+
+  static deletarProdutosPagos(ids) {
     const database = this.db.config()
 
-    const espaçosReservados = idProdutos.map((data) => (data = "?")).join(",");
-    const idsPorVirgula = idProdutos.join(",");
+    const espaçosReservados = ids.map((data) => (data = "?")).join(",");
+    const idsPorVirgula = ids.join(",");
 
     const query = `DELETE FROM PRODUTO WHERE ID_PRODUCT IN(${espaçosReservados})`;
 
     database.prepare(query).run(idsPorVirgula)
-    
+
+    database.close()
   }
+
   static async buscarItensNoCarrinhoDb(msg) {
     const { id } = await msg.getChat();
 
-    const itensCarrinho = this.db.config().prepare(this.query()).all(id);
+    const itensCarrinho = this.db.config().prepare(this.queryProdutos()).all(id);
 
     if (itensCarrinho.length != 0) {
-      const somaProdutos = itensCarrinho .map((item) => item.PRECO_PRODUTO) .reduce((acc, preco) => acc + preco, 0);
+      const somaProdutos = itensCarrinho.map((item) => item.PRECO_PRODUTO) .reduce((acc, preco) => acc + preco, 0);
 
       await ComprasViaPix.pagamentoEmPix(msg, somaProdutos);
 
@@ -85,7 +103,7 @@ class ComprasViaPix {
   static atualizarStatusProdutoPedidos() {
     const query = "UPDATE PEDIDOS SET status = ? WHERE ID_PRODUCT = ? ";
   }
-  static query() {
+  static queryProdutos() {
     return `
     SELECT 
       PEDIDOS.status, 
@@ -105,7 +123,7 @@ class ComprasViaPix {
       PRODUTO.nome ASC;
   `;
   }
-  static mensagens(chavePix) {
+  static mensagens(keys) {
     return {
       msgCarrinho: `
 🚨 Carrinho Vazio 🚨
@@ -121,7 +139,7 @@ Estamos aqui para ajudar em qualquer dúvida! 😄
 
 Você pode realizar o pagamento utilizando a chave Pix abaixo:
 
-🔑 **Chave Pix**: \`${chavePix}\`
+🔑 **Chave Pix**: \`${keys}\`
 
 Para pagar, basta copiar essa chave e colar no seu app de pagamento ou escanear o QR Code. 📸
 
@@ -130,8 +148,7 @@ Se preferir, você também pode usar o QR Code para facilitar! 👇
 Caso tenha qualquer dúvida, estamos à disposição! 🤝
         `,
 
-      msgAguardandoPay:
-        "⏳ Aguardando pagamento...\n\n Assim que o pagamento for confirmado, você receberá a notificação. 💸",
+      msgAguardandoPay:"⏳ Aguardando pagamento...\n\n Assim que o pagamento for confirmado, você receberá a notificação. 💸",
 
       msgPagamentoAprovado: `📢 [Bot de Pagamentos]: Olá! 
 
@@ -142,6 +159,12 @@ Agradecemos pela sua compra! Se precisar de algo, estamos à disposição.
 Atenciosamente, 
 Equipe de Pagamentos 💳
 `,
+
+msgKey: `🎉 *Parabéns pela sua compra!* Aqui está a chave de acesso aos seus produtos: **[${keys}]** 🔑.
+
+Se tiver alguma dúvida ou precisar de ajuda, entre em contato conosco pelo e-mail: carçosygegyud@gmail.com ✉️.
+
+Obrigado por escolher a gente! 😊`
     };
   }
 }
