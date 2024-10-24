@@ -5,8 +5,10 @@ const ControlePedidos = require("./controllers/orderController");
 const Ping = require("./controllers/pingController");
 const MeuCarrinho = require("./controllers/meuCarrinhoController");
 const Register = require("./controllers/RegistroUserController");
-const Compras = require("./controllers/FinalizarComprasController");
+const Compras = require("./controllers/ComprasPixController");
 const myApiEXPRESS = require("./routes/botRoutes");
+const CartaoDeCredito = require("./controllers/ComprasCartaoCreditoController");
+const Produtos = require("./controllers/auth/cadastrarProduto");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -24,6 +26,8 @@ class BotConfig {
       MeuCarrinho.bot(bot)
       Register.bot(bot)
       Compras.bot(bot)
+      CartaoDeCredito.bot(bot)
+      Produtos.bot(bot)
       await bot.launch();
     } catch (error) {
       console.log(error);

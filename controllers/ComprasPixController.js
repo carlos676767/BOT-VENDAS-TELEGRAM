@@ -19,8 +19,7 @@ class ComprasViaPix {
   }
 
   static async pagamentoEmPix(msg, valor) {
-    const { qr_code_base64, qr_code } =
-    await ComprasViaPix.MercadoPagoPagamentos.routerPay(valor);
+    const { qr_code_base64, qr_code } =  await ComprasViaPix.MercadoPagoPagamentos.routerPay(valor);
     await ComprasViaPix.enviarMensagensDePagamento(  msg, qr_code_base64, qr_code );
     ComprasViaPix.verificarPagamento(msg);
   }
@@ -39,7 +38,7 @@ class ComprasViaPix {
 
         if (status_pagamento === "approved") {
           msg.reply(ComprasViaPix.mensagens().msgPagamentoAprovado);
-
+          ComprasViaPix.atualizarStatusProdutoPedidos(idProdutos)
           ComprasViaPix.entregarProduto(idProdutos, msg)
           ComprasViaPix.deletarProdutosPagos(idProdutos)
           clearInterval(monitorarPagamentoAprovado);
@@ -49,7 +48,7 @@ class ComprasViaPix {
   }
 
 
-
+  
   static entregarProduto(ids, msg){
     const espaçosReservados = ids.map((data) => (data = "?")).join(",")
 
@@ -73,7 +72,7 @@ class ComprasViaPix {
     database.prepare(query).run(idsPorVirgula)
 
     database.close()
-  }
+  };
 
   static async buscarItensNoCarrinhoDb(msg) {
     const { id } = await msg.getChat();
@@ -94,14 +93,19 @@ class ComprasViaPix {
     }
 
     return msg.reply(this.mensagens().msgCarrinho);
-  }
+  };
 
   static setCache(nome, item) {
     return this.cache.set(nome, item);
-  }
+  };
 
-  static atualizarStatusProdutoPedidos() {
-    const query = "UPDATE PEDIDOS SET status = ? WHERE ID_PRODUCT = ? ";
+  static atualizarStatusProdutoPedidos(ids) {
+    const espaçosReservados = ids.map(data => data = '?').join(',');
+    const query = `UPDATE PEDIDOS SET status = ? WHERE ID_PRODUCT IN(${espaçosReservados})`;
+    const db = this.db.config();
+    const atualizarStatus = db.prepare(query).run('Entregue', ...ids)
+    console.log(atualizarStatus);
+    
   }
   static queryProdutos() {
     return `

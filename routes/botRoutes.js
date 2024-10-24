@@ -1,9 +1,12 @@
-const Compras = require('../controllers/FinalizarComprasController')
+const CartaoDeCredito = require('../controllers/ComprasCartaoCreditoController')
+const Compras = require('../controllers/ComprasPixController')
 const MercadoPagoPagamentos = require('../utils/mercadoPago')
+const StripeApi = require('../utils/stripe')
 
-const myApiEXPRESS = require('express').Router()
+const expressApiRouter = require('express').Router()
 
 
-myApiEXPRESS.post('/mercadoPago', MercadoPagoPagamentos.routerWebhook)
+expressApiRouter.post('/mercadoPago', MercadoPagoPagamentos.routerWebhook)
+expressApiRouter.post('/stripeNotificao', StripeApi.notificacoesPagamento)
 
-module.exports = myApiEXPRESS
+module.exports = expressApiRouter
