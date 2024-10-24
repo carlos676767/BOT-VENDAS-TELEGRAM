@@ -1,44 +1,44 @@
-class Produtos {
+class CadastrarProduto {
   static roles = require("../../config/roles.json");
   static bot(bot) {
     bot.command("criar_produto", async (msg) => {
       const { id } = await msg.getChat();
       const itens = msg.message.text.split(" ").slice(1);
 
-      if (Produtos.validacoes(msg, id, itens)) {
+      if (CadastrarProduto.validacoes(msg, id, itens)) {
         return;
       }
 
-      Produtos.adicionarItens(itens, msg);
+      CadastrarProduto.adicionarItens(itens, msg);
     });
-  }
+  };
 
   static validacoes(msg, id, itens) {
     if (id !== Number(this.roles.csdevAdm)) {
       msg.reply(this.mensagens().msgNaoAdm);
       return true;
-    }
+    };
 
     if (itens.length === 0) {
       msg.reply(this.mensagens().msgProdutoNaoInformado);
       return true;
-    }
+    };
 
     if (itens.length > 3) {
-      msg.reply(Produtos.mensagens().msgLimite);
+      msg.reply(CadastrarProduto.mensagens().msgLimite);
       return true;
-    }
+    };
 
     return false;
-  }
+  };
 
   static adicionarItens(itens, msg) {
     const database = require("../../config/db");
     const query = "INSERT INTO PRODUTO (nome, preco, keys) VALUES(?, ?, ?)";
-    const {lastInsertRowid, changes}  = database.config().prepare(query).run(...itens);
+    const {lastInsertRowid, changes} = database.config().prepare(query).run(...itens);
 
     if (changes >= 1) {
-      return msg.reply(Produtos.mensagens().produtoCadastradoSucesso);
+      return msg.reply(CadastrarProduto.mensagens().produtoCadastradoSucesso);
     };
   };
 
@@ -64,4 +64,4 @@ class Produtos {
   };
 };
 
-module.exports = Produtos;
+module.exports = CadastrarProduto;

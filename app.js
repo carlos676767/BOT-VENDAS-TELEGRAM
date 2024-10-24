@@ -9,6 +9,7 @@ const Compras = require("./controllers/ComprasPixController");
 const myApiEXPRESS = require("./routes/botRoutes");
 const CartaoDeCredito = require("./controllers/ComprasCartaoCreditoController");
 const Produtos = require("./controllers/auth/cadastrarProduto");
+const DeletaProduto = require("./controllers/auth/DeletarProduto");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -23,11 +24,12 @@ class BotConfig {
       ControlePedidos.bot(bot);
       ControlePedidos.comandoDeAdicionaItem(bot);
       BotAdicionarDados.acoesBot(bot);
-      MeuCarrinho.bot(bot)
-      Register.bot(bot)
-      Compras.bot(bot)
-      CartaoDeCredito.bot(bot)
-      Produtos.bot(bot)
+      MeuCarrinho.bot(bot);
+      Register.bot(bot);
+      Compras.bot(bot);
+      CartaoDeCredito.bot(bot);
+      Produtos.bot(bot);
+      DeletaProduto.bot(bot);
       await bot.launch();
     } catch (error) {
       console.log(error);
