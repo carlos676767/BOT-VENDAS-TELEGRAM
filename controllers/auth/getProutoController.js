@@ -37,7 +37,7 @@ class BotAdicionarDados {
       itens: '🛒 Confira nossos produtos disponíveis:'
     };
     
-  }
-}
+  };
+};
 
 module.exports = BotAdicionarDados;

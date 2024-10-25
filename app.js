@@ -10,6 +10,7 @@ const myApiEXPRESS = require("./routes/botRoutes");
 const CartaoDeCredito = require("./controllers/ComprasCartaoCreditoController");
 const Produtos = require("./controllers/auth/cadastrarProduto");
 const DeletaProduto = require("./controllers/auth/DeletarProduto");
+const ProdutosAtualiaalizar = require("./controllers/auth/atualizarProdutoController");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -30,6 +31,7 @@ class BotConfig {
       CartaoDeCredito.bot(bot);
       Produtos.bot(bot);
       DeletaProduto.bot(bot);
+      ProdutosAtualiaalizar.bot(bot)
       await bot.launch();
     } catch (error) {
       console.log(error);
