@@ -13,6 +13,7 @@ class MeuCarrinho {
 
       const { ID } = procurarUser;
       const dados = await MeuCarrinho.procurarProdutosVinculadosComAconta(ID);
+      console.log(dados);
       
       
       if (dados.length == 0) {
@@ -29,7 +30,6 @@ class MeuCarrinho {
       msg.reply(`${MeuCarrinho.menssages().msgItens} \n\n ${itens} \n ${MeuCarrinho.menssages().msgFimCompra}`)
     });
   }
-
 
   
 
@@ -77,8 +77,9 @@ Para escolher outro método de pagamento, use o comando: \`/finalizarCompraComOu
 
   static procurarProdutosVinculadosComAconta(id, msg) {
     const database = this.DatabaseSql.config();
-      const dados = database.prepare(this.query("?")).all(id);
-      return dados
+    const dados = database.prepare(this.query("?")).all(id);
+      
+    return dados
   }
 
 

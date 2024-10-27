@@ -4,6 +4,7 @@
     "express": "^4.21.1",
     "mercadopago": "^2.0.15",
     "node-cache": "^5.1.2",
+    "nodemailer": "^6.9.15",
     "qrcode": "^1.5.4",
     "stripe": "^17.2.0",
     "telegraf": "^4.16.3"

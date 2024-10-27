@@ -103,8 +103,8 @@ class ComprasViaPix {
     const espaçosReservados = ids.map(data => data = '?').join(',');
     const query = `UPDATE PEDIDOS SET status = ? WHERE ID_PRODUCT IN(${espaçosReservados})`;
     const db = this.db.config();
-    const atualizarStatus = db.prepare(query).run('Entregue', ...ids)
-    console.log(atualizarStatus);
+    db.prepare(query).run('Entregue', ...ids)
+   
     
   }
   static queryProdutos() {

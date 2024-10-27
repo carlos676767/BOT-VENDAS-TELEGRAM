@@ -7,12 +7,12 @@ class CadastrarProduto {
 
       if (CadastrarProduto.validacoes(msg, id, itens)) {
         return;
-      }
+      };
 
       CadastrarProduto.adicionarItens(itens, msg);
     });
   };
-
+  
   static validacoes(msg, id, itens) {
     if (id !== Number(this.roles.csdevAdm)) {
       msg.reply(this.mensagens().msgNaoAdm);
@@ -49,9 +49,10 @@ class CadastrarProduto {
         `Por favor, solicite permissão de administrador para realizar essa ação. Entre em contato com o responsável.\n\n` +
         `🤖 *nextVendasBot*`,
 
-      msgProdutoNaoInformado: `⚠️ *Nenhum produto informado!* ⚠️\n` +
-        `Você não forneceu os detalhes do produto para cadastro. Por favor, verifique e envie as informações corretamente.\n\n` +
-        `🤖 *nextVendasBot*`,
+      msgProdutoNaoInformado: `⚠️ Nenhum Produto Informado! ⚠️  
+Parece que você não forneceu os detalhes do produto para cadastro. Verifique e envie as informações corretamente para prosseguir.
+
+🤖nextVendasBot: /criar_produto <nome do produto>, <valor>, <key>.`,
 
       msgLimite: `⚠️ *Limite de itens excedido!* ⚠️\n` +
         `Você pode adicionar no máximo 3 itens. Por favor, revise sua lista e tente novamente.\n\n` +

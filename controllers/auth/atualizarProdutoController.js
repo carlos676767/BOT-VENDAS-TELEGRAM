@@ -34,15 +34,12 @@ class ProdutosAtualiaalizar {
     if (!arraysOpcoes.includes(Number(opcao))) {
         msg.reply(this.mensages().opcaoInvalida)
         return true
-    }
+    };
 
     return false;
-
   };
 
-
-
-
+  
   static mensages() {
     return {
         naoAutorizado: `⚠️ *Acesso negado!* ⚠️  
@@ -52,7 +49,7 @@ Por favor, solicite permissão de administrador para proceder. Entre em contato 
 
 🤖 *nextVendasBot*`,
 
-        msgAtt: `🔄 *Atualização de Produto* 🔄  
+  msgAtt: `🔄 *Atualização de Produto* 🔄  
 Para atualizar o produto, utilize os seguintes comandos:
 
 - Para atualizar o nome, digite: \`/editar_produto 1 [novo nome]\`  
@@ -124,7 +121,7 @@ Por favor, tente novamente mais tarde. Se o problema persistir, entre em contato
         '1': 'nome',
         '2': 'preco', 
         '3': 'keys'
-    }
+    };
 
     const valorSetado = condicional[optionNumero]
     const query = `UPDATE PRODUTO SET ${valorSetado} = ? WHERE ID_PRODUCT = ?`
@@ -134,7 +131,7 @@ Por favor, tente novamente mais tarde. Se o problema persistir, entre em contato
         msg.reply(this.mensages().msgIdErrado)
         return true
     }
-    
+
     return msg.reply(this.mensages().msgProdutoAtt)
    } catch (error) {
     msg.reply(this.mensages().err404)
