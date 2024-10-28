@@ -10,12 +10,12 @@ class Menu {
     3. 📦 /meu_carrinho - Meu Carrinho
     4. 📋 /comprar_produto** - Comprar produto
     5. 💳 /pagamentos - Pagamentos
-    6. 📊 /status_do_pedido - Status do Pedido
-    7. 🛠️ /criar_produto - Criar Produto
-    8. ✏️ /editar_produto - Editar Produto
-    9. 🗑️ /deletar_produto** - Deletar Produto
-    10. 📶 /ver_ping - Ver Ping
-    11. 📝 /registrar - Registrar novo usuário
+    6. 🛠️ /criar_produto - Criar Produto
+    7. ✏️ /editar_produto - Editar Produto
+    8. 🗑️ /deletar_produto** - Deletar Produto
+    9. 📶 /ver_ping - Ver Ping
+    10. 📝 /registrar - Registrar novo usuário
+    11. 👁 /perfil - Perfil do usuário
     
     Escolha uma opção digitando o comando correspondente! 😊`;
     

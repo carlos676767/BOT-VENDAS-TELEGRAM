@@ -12,9 +12,7 @@ class Register {
     try {
       const idEmNumero = Number(id);
       const queryVuscaerUser = "SELECT * FROM USER WHERE ID = ?";
-      const buscarUser = this.DatabaseSql.config()
-        .prepare(queryVuscaerUser)
-        .get(idEmNumero);
+      const buscarUser = this.DatabaseSql.config().prepare(queryVuscaerUser).get(idEmNumero);
 
       if (buscarUser == undefined) {
         const query = "INSERT  INTO USER(NOME_USER, ID) VALUES(?, ?)";
@@ -35,7 +33,7 @@ class Register {
       usuarioJaCadastrado: `😔 Oops! Você já está cadastrado em nosso sistema. 
         Não é necessário se registrar novamente. 
         Se precisar de ajuda ou tiver alguma dúvida, estou à disposição! 😊`,
-      usuarioCadastradoComSucesso: `🎉 Parabéns! Você foi cadastrado com sucesso! 
+       usuarioCadastradoComSucesso: `🎉 Parabéns! Você foi cadastrado com sucesso! 
         Agora, explore nossos produtos e aproveite as ofertas. 
         Se precisar de algo, me avise! 😉`,
     };

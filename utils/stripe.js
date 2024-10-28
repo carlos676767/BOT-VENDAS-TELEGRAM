@@ -37,7 +37,7 @@ class StripeApi {
         return url
         
       } catch (error) {
-        console.log(error);
+
         
         throw new Error('error ao criar pagamento.')
       }
@@ -51,29 +51,27 @@ class StripeApi {
 
 
        if (tipoNotificacao === "charge.succeeded") {
-        const query = 'INSERT INTO PAGAMENTOS_CARTAO (status_pagamento, email_user, recibo, ID_DO_USUARIO, ID_PRODUTOS) VALUES(?, ?, ?, ?, ?)'
+        const query = 'INSERT INTO PAGAMENTOS_CARTAO (status_pagamento, email_user, recibo, ID_DO_USUARIO, ID_PRODUTOS) VALUES(?, ?, ?, ?, ?)';
         
         const charge = req.body.data.object;
 
         const dados = {
           email:charge.billing_details.email,
-          recibo: charge.receipt_url 
+          recibo: charge.receipt_url
         };
 
         const instanciaDb = database.config();
         const idUsuario = cache.get('idUsuario');
         const idProdutos = cache.get('iDSPRODUTOS');
         const {email, recibo} = dados;
-        const {changes} = instanciaDb.prepare(query).run('aprovado',email, recibo, idUsuario, idProdutos)
+        instanciaDb.prepare(query).run('aprovado',email, recibo, idUsuario, idProdutos);
         
       };
 
       } catch (error) {
         console.log(error);
-        
-        throw new Error("Erro ao ver webhook", error);
       }finally{
-        database.config().close
+        database.config().close;
       }
     }
   }

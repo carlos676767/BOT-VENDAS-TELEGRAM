@@ -69,13 +69,13 @@ class CartaoDeCredito {
       if (webhook) {
        const {email_user, recibo, ID_PRODUTOS, ID_DO_USUARIO} = webhook;
        await this.email.enviarEmail(recibo, email_user)
-       CartaoDeCredito.deleteProduto(ID_PRODUTOS);
        CartaoDeCredito.entregarProduto(ID_PRODUTOS, msg);
+       CartaoDeCredito.deleteProduto(ID_PRODUTOS);
       
        CartaoDeCredito.deletarItensPagosCartao(ID_DO_USUARIO);
        clearInterval(pagamento);
       };
-
+      
      }, 20000);
 
     } catch (error) {
@@ -111,7 +111,7 @@ class CartaoDeCredito {
    } catch (error) {
     msg.reply(this.mensagens().mensagemErroProduto);
    }finally{
-    this.database.config().close
+    this.database.config().close();
    };
   };
 
@@ -126,13 +126,13 @@ class CartaoDeCredito {
 
 
   static deletarItensPagosCartao(usuario){
-    const query = 'DELETE FROM PAGAMENTOS_CARTAO WHERE ID_DO_USUARIO = ?'
-    const databaseImportar = this.database.config()
-    databaseImportar.prepare(query).run(usuario)
+    const query = 'DELETE FROM PAGAMENTOS_CARTAO WHERE ID_DO_USUARIO = ?';
+    const databaseImportar = this.database.config();
+    databaseImportar.prepare(query).run(usuario);
   };
 
   static querys(){
-      return `
+    return `
     SELECT 
       PEDIDOS.status, 
       PEDIDOS.ID_USER, 

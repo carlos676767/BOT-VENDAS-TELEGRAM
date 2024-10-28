@@ -18,8 +18,8 @@ class ComprasViaPix {
     await msg.reply(ComprasViaPix.mensagens(qr_code).chavePix);
   }
 
-  static async pagamentoEmPix(msg, valor) {
-    const { qr_code_base64, qr_code } =  await ComprasViaPix.MercadoPagoPagamentos.routerPay(valor);
+  static async pagamentoEmPix(msg, valor, itens) {
+    const { qr_code_base64, qr_code } =  await ComprasViaPix.MercadoPagoPagamentos.routerPay(valor, itens);
     await ComprasViaPix.enviarMensagensDePagamento(  msg, qr_code_base64, qr_code );
     ComprasViaPix.verificarPagamento(msg);
   }
@@ -32,57 +32,66 @@ class ComprasViaPix {
 
       if (data != undefined) {
         const { status_pagamento } = data;
-
+      
+        
         const idProdutos = this.cache.get("ids")
         
-
         if (status_pagamento === "approved") {
           msg.reply(ComprasViaPix.mensagens().msgPagamentoAprovado);
-          ComprasViaPix.atualizarStatusProdutoPedidos(idProdutos)
-          ComprasViaPix.entregarProduto(idProdutos, msg)
-          ComprasViaPix.deletarProdutosPagos(idProdutos)
+          ComprasViaPix.atualizarStatusProdutoPedidos(idProdutos);
+          ComprasViaPix.entregarProduto(idProdutos, msg);
+          ComprasViaPix.deletarProdutosPagoPix(idUsuario);
+          ComprasViaPix.deletarProdutosPagos(idProdutos);
           clearInterval(monitorarPagamentoAprovado);
-        }
-      }
+        };
+      };
     }, 20000);
-  }
-
+  };
 
   
+  static deletarProdutosPagoPix(usuario){
+    const query = 'DELETE FROM PAGAMENTOS_CARTAO WHERE ID_DO_USUARIO = ?';
+    const databaseImportar = this.db.config();
+    databaseImportar.prepare(query).run(usuario);
+  };
+
   static entregarProduto(ids, msg){
-    const espaçosReservados = ids.map((data) => (data = "?")).join(",")
+    const espaçosReservados = ids.map((data) => (data = "?")).join(",");
 
-    const query = `SELECT * FROM PRODUTO WHERE ID_PRODUCT IN(${espaçosReservados})`
+    const query = `SELECT * FROM PRODUTO WHERE ID_PRODUCT IN(${espaçosReservados})`;
   
-    const procurarKeys = this.db.config().prepare(query).all(...ids)
+    const procurarKeys = this.db.config().prepare(query).all(...ids);
 
-    const keys = procurarKeys.map(data => data.keys).join(',')
-    msg.reply(this.mensagens(keys).msgKey)
+    const keys = procurarKeys.map(data => data.keys).join(',');
+
+    msg.reply(this.mensagens(keys).msgKey);
 
   };
 
   static deletarProdutosPagos(ids) {
-    const database = this.db.config()
+    const database = this.db.config();
 
     const espaçosReservados = ids.map((data) => (data = "?")).join(",");
     const idsPorVirgula = ids.join(",");
 
     const query = `DELETE FROM PRODUTO WHERE ID_PRODUCT IN(${espaçosReservados})`;
 
-    database.prepare(query).run(idsPorVirgula)
+    database.prepare(query).run(idsPorVirgula);
 
-    database.close()
+    database.close();
   };
 
   static async buscarItensNoCarrinhoDb(msg) {
     const { id } = await msg.getChat();
 
     const itensCarrinho = this.db.config().prepare(this.queryProdutos()).all(id);
-
+    
     if (itensCarrinho.length != 0) {
       const somaProdutos = itensCarrinho.map((item) => item.PRECO_PRODUTO) .reduce((acc, preco) => acc + preco, 0);
+      const itens = itensCarrinho.map(data => data.NOME_PRODUTO).join(',')
 
-      await ComprasViaPix.pagamentoEmPix(msg, somaProdutos);
+      
+      await ComprasViaPix.pagamentoEmPix(msg, somaProdutos, itens);
 
       const idsProdutos = itensCarrinho.map((item) => item.ID_PRODUCT);
 
@@ -103,10 +112,10 @@ class ComprasViaPix {
     const espaçosReservados = ids.map(data => data = '?').join(',');
     const query = `UPDATE PEDIDOS SET status = ? WHERE ID_PRODUCT IN(${espaçosReservados})`;
     const db = this.db.config();
-    db.prepare(query).run('Entregue', ...ids)
-   
-    
-  }
+    db.prepare(query).run('Entregue', ...ids);
+
+  };
+
   static queryProdutos() {
     return `
     SELECT 

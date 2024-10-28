@@ -13,7 +13,6 @@ class MeuCarrinho {
 
       const { ID } = procurarUser;
       const dados = await MeuCarrinho.procurarProdutosVinculadosComAconta(ID);
-      console.log(dados);
       
       
       if (dados.length == 0) {

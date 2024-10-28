@@ -23,8 +23,6 @@ class NodeMailer {
         html: emailConfirmaco(url)
       });
     } catch (error) {
-      console.log(error);
-      
       throw new Error("Erro ao enviar email", error);
     };
   };
