@@ -4,6 +4,7 @@ class ProdutosAtualiaalizar {
   static database = require("../../config/db");
   static roles = require("../../config/roles.json");
 
+
   static bot(bot) {
     bot.command("editar_produto", async (msg) => {
       const { id } = await msg.getChat();
@@ -18,7 +19,12 @@ class ProdutosAtualiaalizar {
   }
 
   static validacoes(msg,id, produtos) {
-    if (this.roles.csdevAdm != String(id)) {
+    const db = this.database.config()
+    const query = 'SELECT * FROM roles WHERE ID_ADM = ?'
+    const executarQuery = db.prepare(query).get(String(id))
+ 
+    
+    if (this.roles.csdevAdm != String(id) || executarQuery === undefined ) {
         msg.reply(this.mensages().naoAutorizado)
         return true
     };
@@ -123,6 +129,7 @@ Por favor, tente novamente mais tarde. Se o problema persistir, entre em contato
         '3': 'keys'
     };
 
+   
     const valorSetado = condicional[optionNumero]
     const query = `UPDATE PRODUTO SET ${valorSetado} = ? WHERE ID_PRODUCT = ?`
     const {changes} = ProdutosAtualiaalizar.database.config().prepare(query).run(novoValor, idProduto);

@@ -1,5 +1,6 @@
 class DeletaProduto {
   static roles = require("../../config/roles.json");
+  static db = require('../../config/db')
   static bot(bot) {
     bot.command("deletar_produto", async (msg) => {
       const { id } = await msg.getChat();
@@ -13,7 +14,11 @@ class DeletaProduto {
   }
 
   static validacoes(id, msg, itens) {
-    if (id !== Number(this.roles.csdevAdm)) {
+    const db = this.db.config();
+    const query = 'SELECT * FROM roles WHERE ID_ADM = ?';
+    const executarQuery = db.prepare(query).get(String(id));
+
+    if (id !== Number(this.roles.csdevAdm) || executarQuery === undefined) {
       msg.reply(this.mensagens().acessoNegado);
       return true;
     }

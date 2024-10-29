@@ -14,8 +14,11 @@ class Menu {
     7. ✏️ /editar_produto - Editar Produto
     8. 🗑️ /deletar_produto** - Deletar Produto
     9. 📶 /ver_ping - Ver Ping
-    10. 📝 /registrar - Registrar novo usuário
+    10.📝 /registrar - Registrar novo usuário
     11. 👁 /perfil - Perfil do usuário
+    12. 🧑‍💼 /registrarNovosAdm - Registrar novos adm(apenas dono.)
+    11. 🧑‍💼 /atualizarAdms - Atualizar adns (apenas o dono.)
+    12. 🧑‍💼 /apagarAdms - Apagar os adms (apenas o dono.)
     
     Escolha uma opção digitando o comando correspondente! 😊`;
     
@@ -40,10 +43,11 @@ class Menu {
       if (buscarUser == undefined) {
         const query = 'INSERT  INTO USER(NOME_USER, ID) VALUES(?, ?)'
         this.Sql.config().prepare(query).run(nome, id) 
-        this.Sql.config().close()
       }
       
     } catch (error) {
+      this.Sql.config().close()
+    }finally{
       this.Sql.config().close()
     }
   }

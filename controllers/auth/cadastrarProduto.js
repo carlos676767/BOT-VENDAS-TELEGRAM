@@ -1,5 +1,6 @@
 class CadastrarProduto {
   static roles = require("../../config/roles.json");
+  static db = require('../../config/db')
   static bot(bot) {
     bot.command("criar_produto", async (msg) => {
       const { id } = await msg.getChat();
@@ -14,11 +15,17 @@ class CadastrarProduto {
   };
   
   static validacoes(msg, id, itens) {
-    if (id !== Number(this.roles.csdevAdm)) {
+
+    
+    const db = this.db.config()
+    const query = 'SELECT * FROM roles WHERE ID_ADM = ?'
+    const executarQuery = db.prepare(query).get(String(id))
+
+    if (id !== Number(this.roles.csdevAdm) || executarQuery == undefined) {
       msg.reply(this.mensagens().msgNaoAdm);
       return true;
     };
-
+    
     if (itens.length === 0) {
       msg.reply(this.mensagens().msgProdutoNaoInformado);
       return true;

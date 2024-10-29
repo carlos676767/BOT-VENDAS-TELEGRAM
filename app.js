@@ -13,6 +13,8 @@ const DeletaProduto = require("./controllers/auth/DeletarProduto");
 const ProdutosAtualiaalizar = require("./controllers/auth/atualizarProdutoController");
 const PerfilController = require("./controllers/perfilController");
 const FormasPagamentos = require("./controllers/formasPagamentosController");
+const Adm = require("./controllers/auth/RegistrarNovosAdmController");
+const AdmsApagar = require("./controllers/auth/apagarAdmsController");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -36,6 +38,8 @@ class BotConfig {
       ProdutosAtualiaalizar.bot(bot)
       PerfilController.bot(bot)
       FormasPagamentos.pagamentosFormas(bot)
+      Adm.bot(bot)
+      AdmsApagar.bot(bot)
       await bot.launch();
     } catch (error) {
       console.log(error);
