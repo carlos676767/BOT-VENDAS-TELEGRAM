@@ -1,6 +1,6 @@
 class AdmsApagar {
   static config = require("../../config/roles.json");
-  static db = require("../../config/db").config()
+  static db = require("../../config/db").config();
   static bot(bot) {
     bot.command("apagarAdms", async (msg) => {
       const menssage = msg.message.text.split(" ").slice(1);
@@ -34,9 +34,12 @@ class AdmsApagar {
 
   static mensagens() {
     return {
-        msgErro404: 'Olá! ❌ Ocorreu um erro ao tentar apagar o administrador. Por favor, tente novamente mais tarde. Se precisar de assistência, estamos à disposição!',
-        idNaoEncontrado: 'Olá! ⚠️ O ID informado não foi encontrado. Por favor, verifique e tente novamente. Se precisar de ajuda, estamos aqui!',
-        msgAdmPagado: 'Olá! ✨ Informamos que o administrador foi apagado com sucesso. Se precisar de mais assistência, estamos à disposição!',
+      msgErro404:
+        "Olá! ❌ Ocorreu um erro ao tentar apagar o administrador. Por favor, tente novamente mais tarde. Se precisar de assistência, estamos à disposição!",
+      idNaoEncontrado:
+        "Olá! ⚠️ O ID informado não foi encontrado. Por favor, verifique e tente novamente. Se precisar de ajuda, estamos aqui!",
+      msgAdmPagado:
+        "Olá! ✨ Informamos que o administrador foi apagado com sucesso. Se precisar de mais assistência, estamos à disposição!",
       msgComprimento:
         "Olá! 😊 Por favor, note que o comprimento da mensagem deve ser de no máximo 1. Agradecemos a sua colaboração!",
       naoEoDono:
@@ -49,18 +52,18 @@ class AdmsApagar {
   static deletarAdm(id, msg) {
     try {
       const query = "DELETE FROM roles WHERE ID_ADM = ?";
-      
+
       const { changes } = this.db.prepare(query).run(String(id));
 
       if (changes >= 1) {
-        msg.reply(this.mensagens().msgAdmPagado)
-        return
+        msg.reply(this.mensagens().msgAdmPagado);
+        return;
       }
-      msg.reply(this.mensagens().idNaoEncontrado)
+      msg.reply(this.mensagens().idNaoEncontrado);
     } catch (error) {
-        msg.reply(this.mensagens().msgErro404)
-    }finally{
-        this.db.close()
+      msg.reply(this.mensagens().msgErro404);
+    } finally {
+      this.db.close();
     }
   }
 }
