@@ -8,20 +8,23 @@ class Menu {
     1. 🖐️ /iniciar - Iniciar a interação com o bot
     2. 🛒 /ver_produtos - Ver Produtos
     3. 📦 /meu_carrinho - Meu Carrinho
-    4. 📋 /comprar_produto** - Comprar produto
+    4. 📋 /comprar_produto - Comprar Produto
     5. 💳 /pagamentos - Pagamentos
     6. 🛠️ /criar_produto - Criar Produto
     7. ✏️ /editar_produto - Editar Produto
-    8. 🗑️ /deletar_produto** - Deletar Produto
+    8. 🗑️ /deletar_produto - Deletar Produto
     9. 📶 /ver_ping - Ver Ping
-    10.📝 /registrar - Registrar novo usuário
+    10. 📝 /registrar - Registrar novo usuário
     11. 👁 /perfil - Perfil do usuário
-    12. 🧑‍💼 /registrarNovosAdm - Registrar novos adm(apenas dono.)
-    11. 🧑‍💼 /atualizarAdms - Atualizar adns (apenas o dono.)
-    12. 🧑‍💼 /apagarAdms - Apagar os adms (apenas o dono.)
-    
+    12. 🧑‍💼 /registrarNovosAdm - Registrar novos administradores (apenas dono)
+    13. 🔄 /atualizarAdms - Atualizar administradores (apenas dono)
+    14. ❌ /apagarAdms - Apagar administradores (apenas dono)
+    15. 🧾 /historico - Ver histórico de compras
+    16. 🔔 /notificar - Enviar notificações aos usuários(ADMS)
+   
+
     Escolha uma opção digitando o comando correspondente! 😊`;
-    
+
     return menuText;
   }
 
@@ -45,13 +48,11 @@ class Menu {
         this.Sql.config().prepare(query).run(nome, id) 
       }
       
-    } catch (error) {
-      this.Sql.config().close()
     }finally{
       this.Sql.config().close()
-    }
-  }
-}
+    };
+  };
+};
 
 
 module.exports = Menu;

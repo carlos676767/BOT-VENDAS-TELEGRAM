@@ -26,7 +26,6 @@ class admAtualizar {
         return true;
       }
 
-      console.log(String(id));
       
       if (id.length > 3) {
         msg.reply(this.mensagens().msgComprimento);
@@ -49,8 +48,7 @@ class admAtualizar {
   
     static atualizarAdm(id, msg) {
       try {
-        console.log(id);
-        
+
         const query = "UPDATE roles SET ID_ADM = ? WHERE ID_ADM = ?";
   
         const { changes } = this.db.prepare(query).run(String(id[0]), String(id[1]));
@@ -58,7 +56,8 @@ class admAtualizar {
         if (changes >= 1) {
           msg.reply(this.mensagens().msgAtualiado);
           return;
-        }
+        };
+        
         msg.reply(this.mensagens().idNaoEncontrado);
       } catch (error) {
         msg.reply(this.mensagens().msgErro404);
@@ -68,5 +67,5 @@ class admAtualizar {
     }
   }
   
-  module.exports = admAtualizar;
+module.exports = admAtualizar;
 

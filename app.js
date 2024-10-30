@@ -16,6 +16,7 @@ const FormasPagamentos = require("./controllers/formasPagamentosController");
 const Adm = require("./controllers/auth/RegistrarNovosAdmController");
 const AdmsApagar = require("./controllers/auth/apagarAdmsController");
 const admAtualizar = require("./controllers/auth/atualizarAdms");
+const Notificacao = require("./controllers/auth/notificacoesController");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -25,6 +26,7 @@ class BotConfig {
     try {
       console.log("bot rodando");
       const bot = new this.telegraf.Telegraf(this.config.Token);
+      
       Menu.menu(bot);
       Ping.pingBot(bot);
       ControlePedidos.bot(bot);
@@ -42,6 +44,7 @@ class BotConfig {
       Adm.bot(bot)
       AdmsApagar.bot(bot)
       admAtualizar.bot(bot)
+      Notificacao.bot(bot)
       await bot.launch();
     } catch (error) {
       console.log(error);
