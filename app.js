@@ -17,6 +17,7 @@ const Adm = require("./controllers/auth/RegistrarNovosAdmController");
 const AdmsApagar = require("./controllers/auth/apagarAdmsController");
 const admAtualizar = require("./controllers/auth/atualizarAdms");
 const Notificacao = require("./controllers/auth/notificacoesController");
+const HistoricoCompras = require("./controllers/historicoControllerCompras");
 
 class BotConfig {
   static telegraf = require("telegraf");
@@ -45,6 +46,7 @@ class BotConfig {
       AdmsApagar.bot(bot)
       admAtualizar.bot(bot)
       Notificacao.bot(bot)
+      HistoricoCompras.bot(bot)
       await bot.launch();
     } catch (error) {
       console.log(error);
