@@ -7,11 +7,11 @@ class HistoricoCompras {
 
       if (this.verificarCadastrado(msg, id)) {
         return;
-      }
+      };
 
       HistoricoCompras.buscarHistorico(id, msg);
     });
-  }
+  };
 
   static verificarCadastrado(msg, id) {
     try {
@@ -21,7 +21,8 @@ class HistoricoCompras {
       if (executarQuery === undefined) {
         msg.reply(this.mensagens().msgCadastro);
         return true;
-      }
+      };
+
     } catch (error) {
       msg.reply(this.mensagens().msgError404);
     } finally {
@@ -31,12 +32,9 @@ class HistoricoCompras {
 
   static mensagens() {
     return {
-      histirocoErr:
-        "⚠️ Oops! Houve um erro ao tentar acessar o histórico de pedidos. Por favor, tente novamente mais tarde. Estamos aqui para ajudar! 😊",
-      msgError404:
-        "⚠️ Oops! Houve um erro ao verificar se o usuário está cadastrado. Por favor, tente novamente mais tarde ou use o comando `/registrar` para se inscrever. Estamos aqui para ajudar! 😊",
-      msgCadastro:
-        "🌟 Olá! Para acessar o histórico, você precisa estar cadastrado. Por favor, use o comando `/registrar` para se inscrever. Assim, poderemos te ajudar melhor! 😊",
+      histirocoErr:  "⚠️ Oops! Houve um erro ao tentar acessar o histórico de pedidos. Por favor, tente novamente mais tarde. Estamos aqui para ajudar! 😊",
+      msgError404: "⚠️ Oops! Houve um erro ao verificar se o usuário está cadastrado. Por favor, tente novamente mais tarde ou use o comando `/registrar` para se inscrever. Estamos aqui para ajudar! 😊",
+      msgCadastro: "🌟 Olá! Para acessar o histórico, você precisa estar cadastrado. Por favor, use o comando `/registrar` para se inscrever. Assim, poderemos te ajudar melhor! 😊",
     };
   }
 
@@ -66,8 +64,8 @@ class HistoricoCompras {
       msg.reply(this.mensagens().histirocoErr);
     } finally {
       this.db.config().close();
-    }
-  }
-}
+    };
+  };
+};
 
 module.exports = HistoricoCompras;

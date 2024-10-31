@@ -40,13 +40,13 @@ class Menu {
 
   static cadastrarUser( nome,id){
     try {
-      const queryVuscaerUser = 'SELECT * FROM USER WHERE ID = ?'
-      const buscarUser = this.Sql.config().prepare(queryVuscaerUser).get(id)
+      const queryVuscaerUser = 'SELECT * FROM USER WHERE ID = ?';
+      const buscarUser = this.Sql.config().prepare(queryVuscaerUser).get(id);
       
       if (buscarUser == undefined) {
-        const query = 'INSERT  INTO USER(NOME_USER, ID) VALUES(?, ?)'
-        this.Sql.config().prepare(query).run(nome, id) 
-      }
+        const query = 'INSERT  INTO USER(NOME_USER, ID) VALUES(?, ?)';
+        this.Sql.config().prepare(query).run(nome, id);
+      };
       
     }finally{
       this.Sql.config().close()
