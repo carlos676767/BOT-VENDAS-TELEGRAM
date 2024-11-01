@@ -1,19 +1,16 @@
 class UsuariosApagar {
   static config = require("../../config/roles.json");
-  static db = require("../../config/db").config();
+  static database = require("../../config/db")
 
   static bot(bot) {
     bot.command("limparUsuarios", async (msg) => {
       const { id } = await msg.getChat();
-      this.validacoes(id, msg) ? null : this.apagarItens();
+      this.validacoes(id, msg) ? null : this.apagarItens(msg);
     });
   }
 
   static validacoes(id, msg) {
-    const query = "SELECT * FROM ROLES WHERE ID_ADM = ?";
-    const exefutarQuery = this.db.prepare(query).get(String(id));
-
-    if (exefutarQuery === undefined || String(id) != this.config.csdevAdm) {
+    if (String(id) != this.config.csdevAdm) {
       msg.reply(this.mensages().naoAdm);
       return true;
     }
@@ -23,8 +20,14 @@ class UsuariosApagar {
 
   static apagarItens(msg) {
     try {
-      const query = "DELETE FROM PRODUTO";
-      const { changes } = this.db.prepare(query).run();
+      const query = "DELETE FROM USER";
+      const { changes } = this.database.config().prepare(query).run();
+
+      if (changes == 0) {
+        msg.reply(this.mensages().naoHaiTENS);
+        return;
+      }
+
       if (changes >= 1) {
         msg.reply(this.mensages().sucessoItem);
         return;
@@ -34,14 +37,14 @@ class UsuariosApagar {
     } catch (error) {
       msg.reply(this.mensages().falhaerr);
     } finally {
-      this.db.close();
+      this.database.config().close()
     }
   }
 
   static mensages() {
     return {
-      falhaerr:
-        "❌ Ocorreu um erro ao tentar apagar os itens. Por favor, tente novamente mais tarde.",
+      naoHaiTENS: "⚠️ Não há itens para apagar na tabela USER.",
+      falhaerr: "❌ Ocorreu um erro ao tentar apagar os itens. Por favor, tente novamente mais tarde.",
       naoAdm: "Olá! 😊 Você não possui acesso a este comando.",
       sucessoItem: `✅ Todos os itens foram apagados com sucesso da tabela PRODUTO!`,
     };

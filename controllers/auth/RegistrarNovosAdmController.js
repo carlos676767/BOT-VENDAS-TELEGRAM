@@ -5,7 +5,7 @@ class Adm {
   static bot(bot) {
     bot.command("registrarNovosAdm", async (msg) => {
       const { id } = await msg.getChat();
-      console.log(id);
+
       
       const idAdm = msg.text.split(" ").slice(1)[0];
 

@@ -34,7 +34,6 @@ class CartaoDeCredito {
 
       const idsProdutos = itensCarrinho.map((item) => item.ID_PRODUCT).join(',')
 
-      console.log(idsProdutos);
       
       CartaoDeCredito.setarCache('iDSPRODUTOS', idsProdutos);
       CartaoDeCredito.setarCache('idUsuario', id);

@@ -4,7 +4,7 @@ class admAtualizar {
     static bot(bot) {
       bot.command("atualizarAdms", async (msg) => {
         const menssage = msg.message.text.split(" ").slice(1);
-        console.log(menssage);
+   
         
         const { id } = await msg.getChat();
   

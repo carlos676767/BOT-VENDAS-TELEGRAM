@@ -1,74 +1,76 @@
-const bodyParser = require("body-parser");
-const BotAdicionarDados = require("./controllers/auth/getProutoController");
-const Menu = require("./controllers/MenuOpcoes");
-const ControlePedidos = require("./controllers/orderController");
-const Ping = require("./controllers/pingController");
-const MeuCarrinho = require("./controllers/meuCarrinhoController");
-const Register = require("./controllers/RegistroUserController");
-const Compras = require("./controllers/ComprasPixController");
-const myApiEXPRESS = require("./routes/botRoutes");
-const CartaoDeCredito = require("./controllers/ComprasCartaoCreditoController");
-const Produtos = require("./controllers/auth/cadastrarProduto");
-const DeletaProduto = require("./controllers/auth/DeletarProduto");
-const ProdutosAtualiaalizar = require("./controllers/auth/atualizarProdutoController");
-const PerfilController = require("./controllers/perfilController");
-const FormasPagamentos = require("./controllers/formasPagamentosController");
-const Adm = require("./controllers/auth/RegistrarNovosAdmController");
-const AdmsApagar = require("./controllers/auth/apagarAdmsController");
-const admAtualizar = require("./controllers/auth/atualizarAdms");
-const Notificacao = require("./controllers/auth/notificacoesController");
-const HistoricoCompras = require("./controllers/historicoControllerCompras");
-const UsuariosApagar = require("./controllers/auth/ApagarUsuariosController");
-
 class BotConfig {
-  static telegraf = require("telegraf");
-  static message = require("telegraf/filters");
-  static config = require("./config.json");
+  static #telegraf = require("telegraf");
+  static #message = require("telegraf/filters");
+  static #config = require("./config.json");
+  static #BotAdicionarDados = require("./controllers/auth/getProutoController");
+  static #Menu = require("./controllers/MenuOpcoes");
+  static #ControlePedidos = require("./controllers/orderController");
+  static #Ping = require("./controllers/pingController");
+  static #MeuCarrinho = require("./controllers/meuCarrinhoController");
+  static #Register = require("./controllers/RegistroUserController");
+  static #Compras = require("./controllers/ComprasPixController");
+  static #CartaoDeCredito = require("./controllers/ComprasCartaoCreditoController");
+  static #Produtos = require("./controllers/auth/cadastrarProduto");
+  static #DeletaProduto = require("./controllers/auth/DeletarProduto");
+  static #ProdutosAtualiaalizar = require("./controllers/auth/atualizarProdutoController");
+  static #PerfilController = require("./controllers/perfilController");
+  static #FormasPagamentos = require("./controllers/formasPagamentosController");
+  static #Adm = require("./controllers/auth/RegistrarNovosAdmController");
+  static #AdmsApagar = require("./controllers/auth/apagarAdmsController");
+  static #admAtualizar = require("./controllers/auth/atualizarAdms");
+  static #Notificacao = require("./controllers/auth/notificacoesController");
+  static #HistoricoCompras = require("./controllers/historicoControllerCompras");
+  static #ProdutosApagar = require("./controllers/auth/apagarItensController");
+  static #UsuariosApagar = require("./controllers/auth/ApagarUsuariosController");
+
   static async startBot() {
     try {
       console.log("bot rodando");
-      const bot = new this.telegraf.Telegraf(this.config.Token);
-      
-      Menu.menu(bot);
-      Ping.pingBot(bot);
-      ControlePedidos.bot(bot);
-      ControlePedidos.comandoDeAdicionaItem(bot);
-      BotAdicionarDados.acoesBot(bot);
-      MeuCarrinho.bot(bot);
-      Register.bot(bot);
-      Compras.bot(bot);
-      CartaoDeCredito.bot(bot);
-      Produtos.bot(bot);
-      DeletaProduto.bot(bot);
-      ProdutosAtualiaalizar.bot(bot)
-      PerfilController.bot(bot)
-      FormasPagamentos.pagamentosFormas(bot)
-      Adm.bot(bot)
-      AdmsApagar.bot(bot)
-      admAtualizar.bot(bot)
-      Notificacao.bot(bot)
-      HistoricoCompras.bot(bot)
-      UsuariosApagar.bot(bot)
+      const bot = new this.#telegraf.Telegraf(this.#config.Token);
+
+      this.#Menu.menu(bot);
+      this.#Ping.pingBot(bot);
+      this.#ControlePedidos.bot(bot);
+      this.#ControlePedidos.comandoDeAdicionaItem(bot);
+      this.#BotAdicionarDados.acoesBot(bot);
+      this.#MeuCarrinho.bot(bot);
+      this.#Register.bot(bot);
+      this.#Compras.bot(bot);
+      this.#CartaoDeCredito.bot(bot);
+      this.#Produtos.bot(bot);
+      this.#DeletaProduto.bot(bot);
+      this.#ProdutosAtualiaalizar.bot(bot);
+      this.#PerfilController.bot(bot);
+      this.#FormasPagamentos.pagamentosFormas(bot);
+      this.#Adm.bot(bot);
+      this.#AdmsApagar.bot(bot);
+      this.#admAtualizar.bot(bot);
+      this.#Notificacao.bot(bot);
+      this.#HistoricoCompras.bot(bot);
+      this.#ProdutosApagar.bot(bot);
+     this. #UsuariosApagar.bot(bot);
+
       await bot.launch();
     } catch (error) {
       console.log(error);
-    };
-  };
-};
+    }
+  }
+}
 
 class Express {
+  static myApiEXPRESS = require("./routes/botRoutes");
   static #express = require("express");
   static #api = this.#express();
   static #parser = require("body-parser");
   static expressConfig() {
     const port = 8080 || process.env.PORT;
     this.#api.use(this.#parser.json());
-    this.#api.use(myApiEXPRESS)
+    this.#api.use(this.myApiEXPRESS);
     this.#api.listen(port, () => {
       console.log(`servidor rodando na porta ${port}`);
     });
-  };
-};
+  }
+}
 
 BotConfig.startBot();
 Express.expressConfig();

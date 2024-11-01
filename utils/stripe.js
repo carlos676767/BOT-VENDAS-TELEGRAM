@@ -15,7 +15,7 @@ class StripeApi {
       };
   
       return price_data;
-    }
+    };
   
     static configsRedirecionamentoEpagamneto() {
       return {
@@ -23,7 +23,7 @@ class StripeApi {
         success_url: "https://www.exemplo.com",
         cancel_url: "https://www.exemplo.com",
       };
-    }
+    };
   
     static async gerarPagamento(valor,itens) {
       try {
@@ -34,13 +34,12 @@ class StripeApi {
         });
       
         
-        return url
+        return url;
         
       } catch (error) {
-        
-        throw new Error('error ao criar pagamento.')
-      }
-    }
+        throw new Error('error ao criar pagamento.');
+      };
+    };
 
     static async notificacoesPagamento(req, res) {
       const  database = require('../config/db');
