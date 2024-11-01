@@ -21,6 +21,9 @@ class Menu {
     14. ❌ /apagarAdms - Apagar administradores (apenas dono)
     15. 🧾 /historico - Ver histórico de compras
     16. 🔔 /notificar - Enviar notificações aos usuários(ADMS)
+    17 .🛒 /apagarItens - limpa todos os produtos(adms)
+    18 .👨‍💼 /limparUsuarios - limpa todos os usuarios(adms)
+
    
 
     Escolha uma opção digitando o comando correspondente! 😊`;

@@ -9,7 +9,7 @@ class CartaoDeCredito {
     bot.command("finalizarCompraComOutroMetodo",async (msg) => {
       await CartaoDeCredito.buscarItensNoCarrinhoDb(msg)
     });
-  }
+  };
 
 
   static async pagamentoCartaoCredito(valor, msg, nomeItens){
@@ -18,7 +18,7 @@ class CartaoDeCredito {
     if (url != undefined) {
     return msg.reply(this.mensagens(url).msgLink)
     };
-  }
+  };
 
   static async buscarItensNoCarrinhoDb(msg) {
     const { id } = await msg.getChat();
@@ -34,6 +34,7 @@ class CartaoDeCredito {
 
       const idsProdutos = itensCarrinho.map((item) => item.ID_PRODUCT).join(',')
 
+      console.log(idsProdutos);
       
       CartaoDeCredito.setarCache('iDSPRODUTOS', idsProdutos);
       CartaoDeCredito.setarCache('idUsuario', id);
@@ -77,7 +78,7 @@ class CartaoDeCredito {
       };
       
      }, 20000);
-
+     
     } catch (error) {
       throw new Error("Error ao verificar", error);
     }finally{

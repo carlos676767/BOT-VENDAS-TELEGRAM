@@ -37,7 +37,6 @@ class StripeApi {
         return url
         
       } catch (error) {
-
         
         throw new Error('error ao criar pagamento.')
       }

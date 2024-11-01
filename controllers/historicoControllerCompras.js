@@ -55,7 +55,7 @@ class HistoricoCompras {
       const itens = buscarItens.reduce((acc, data) => {
         return (acc += `🍽️ ${data.nome} - 💲${data.preco} - 📅${data.data} - 🔑${data.keys} \n`);
       }, "");
-
+      
       const mensagemHistorico = "🛍️ Aqui está o histórico de pedidos:\n";
       const respostaFinal = mensagemHistorico.concat(itens);
 
